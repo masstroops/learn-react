@@ -1,0 +1,41 @@
+.row {
+  display: flex;
+  width: 100%;
+  .col1 {
+    width: 100px;
+    .link {
+      display: block;
+      width: 100px;
+      line-height: 50px;
+      text-align: center;
+      border: 1px solid #999;
+      
+    }
+    .active {
+      background-color: orange;
+      color: #fff;
+    }
+  }
+  .col2 {
+    padding: 20px;
+    width: calc(100% - 100px);
+  }
+}
+.home {
+  .flex {
+    display: flex;
+    .link {
+      width: 70px;
+      line-height: 40px;
+      text-align: center;
+      border: 1px solid #999;
+    }
+    .active {
+      background-color: blue;
+      color: #fff;
+    }
+  }
+  .content {
+    padding: 20px;
+  }
+}
