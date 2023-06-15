@@ -4,7 +4,6 @@ import './assets/css/global.less'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
-import { main } from './router/router'
 import { RenderRoutes } from './router/allocation'
 
 function App() {
@@ -12,7 +11,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <div className='App'>
-          <RenderRoutes routes={main} />
+          <RenderRoutes />
         </div>
       </BrowserRouter>
     </Provider>

@@ -19,6 +19,7 @@ export default class RouterPage extends React.Component {
           <Link to="/user">用户中心</Link>
           
           {/* 6.0开始Route 需要在 Routes 里，组件为 element,注意括号内为标签 */}
+          {/* react-router-domV6嵌套路由实现详解 https://www.jb51.net/article/271694.htm */}
           <Routes>
             <Route exact={false} path="/" element={<LearnSetstate />} />
             <Route exact={false} path="/user" element={<ReduxPage />} />
