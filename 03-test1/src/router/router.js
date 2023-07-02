@@ -12,6 +12,7 @@ export const menus = [
     // component: lazy(() => import('../pages/index/index2')),
     element: <Index />,
     // element: Index,
+    code: 'index',
   },
   {
     path: '/list',
@@ -20,6 +21,7 @@ export const menus = [
     // component: lazy(() => import('../pages/index/index2')),
     element: <Index />,
     // element: Index,
+    code: 'list',
     children: [
       {
         path: '/list/page1',
@@ -28,6 +30,7 @@ export const menus = [
         // component: lazy(() => import('../pages/index/index2')),
         element: <Index />,
         // element: Index,
+        code: 'page1',
       }
     ]
   }

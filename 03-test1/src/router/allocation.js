@@ -85,6 +85,7 @@ export const RenderRoutes = ({routes}) => {
             navigate('/index')
           }, 1000)
         }
+
       }
     }
   }, [location])
@@ -133,6 +134,7 @@ export const RenderRoutes = ({routes}) => {
     console.log(list1);
     let menus3 = routerViews(list1)
     console.log(menus3);
+    dispatch({ type: 'setmenu', payload: menus3 })
     return menus3
 
     let menus2 = deepMenu(menus, [])
@@ -188,4 +190,31 @@ function deepMenu2(list, rlist) {
     }
   })
   return rlist
+}
+
+// mock
+function getMenus() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([
+        {
+          path: '/index',
+          name: '首页',
+          code: 'index',
+        },
+        {
+          path: '/list',
+          name: '列表页',
+          code: 'list',
+          children: [
+            {
+              path: '/list/page1',
+              name: '列表页1',
+              code: 'page1',
+            }
+          ]
+        }
+      ])
+    }, 1000)
+  })
 }
