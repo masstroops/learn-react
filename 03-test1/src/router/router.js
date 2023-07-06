@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import Login from '../pages/login/login'
 import Index from '../pages/index/index2'
 import Layout from '../components/layout/layout'
+import Notfound from '../components/others/404'
 
 // 菜单路由
 export const menus = [
@@ -56,8 +57,8 @@ export const main = [
   {
     path: '*',
     name: '404',
-    component: () => import('../pages/login/login'),
-    element: <Login />,
+    component: () => import('../components/others/404'),
+    element: <Notfound />,
   },
   // { path: '/login', exact: true, name: '登录', component: <Login /> }, // 使用useRoutes去做路由时要传入组件标签
   // { path: '/login', exact: true, name: '登录', component: lazy(() => import('../pages/login/login')) },

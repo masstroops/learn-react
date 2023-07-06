@@ -7,7 +7,8 @@ import Index from '../pages/index/index2'
 import Intercept from "./intercept";
 import { Spin } from "antd";
 import { http } from "../utils/http";
-import { main } from './router'
+import { main, menus as allMenus } from './router'
+import { deepCopy } from '../utils/common'
 
 const Test = () => {
   return (
@@ -36,6 +37,7 @@ export const RenderRoutes = ({routes}) => {
   let user = useSelector(state => state.user)
   let whitePage = ['/login']
   let [menus, setMenus] = useState([main[1]])
+  let [ajaxMenus, setAjaxMenus] = useState([])
   // let whiteMenus = [main[1]]
   // let element
   // useEffect(() => {
@@ -65,7 +67,6 @@ export const RenderRoutes = ({routes}) => {
   // return <>{element}</>
 
 
-
   useEffect(() => {
     console.log(location, user);
     // 判断白名单页面
@@ -79,16 +80,10 @@ export const RenderRoutes = ({routes}) => {
       if (!localStorage.r_user) {
         navigate('/login')
       } else {
-        if (location.pathname === '/') {
-          setTimeout(() => {
-            setMenus(main)
-            navigate('/index')
-          }, 1000)
-        }
-
+        if (location.pathname === '/') navigate('/index')
       }
     }
-  }, [location])
+  }, [location, ajaxMenus])
 
   const routerBody = useMemo(() => {
     const fellbackStyle = {
@@ -98,6 +93,14 @@ export const RenderRoutes = ({routes}) => {
       minHeight: 500,
       fontSize: 24,
     };
+    console.log(ajaxMenus, 11111111111111);
+    if (ajaxMenus.length === 0) {
+      getMenus().then(res => {
+        let resMenus = pavingMenu(res)
+        setAjaxMenus(filterMenu(allMenus, resMenus))
+        // console.log(ajaxMenus);
+      })
+    }
     const routerViews = (routes) => {
       return routes.map(route => {
         // const Comp = loadable(route.component, { fallback: <Spin style={fellbackStyle} tip="页面加载中...." /> })
@@ -129,12 +132,13 @@ export const RenderRoutes = ({routes}) => {
         }
       })
     }
-    let list1 = deepMenu(menus)
-    deepMenu2(menus, [])
-    console.log(list1);
-    let menus3 = routerViews(list1)
+    let list2 = deepCopy(main)
+    list2[0].children = ajaxMenus
+    // let list1 = deepMenu(list2)
+    // console.log(list1);
+    let menus3 = routerViews(list2)
     console.log(menus3);
-    dispatch({ type: 'setmenu', payload: menus3 })
+    dispatch({ type: 'setmenu', payload: ajaxMenus })
     return menus3
 
     let menus2 = deepMenu(menus, [])
@@ -157,12 +161,24 @@ export const RenderRoutes = ({routes}) => {
         )
       }
     )
-  }, [menus])
+  }, [ajaxMenus])
+
+  if (ajaxMenus.length === 0) {
+    const fellbackStyle = {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: 500,
+      fontSize: 20,
+    }
+    return (<Spin style={fellbackStyle} tip="页面加载中...." />)
+  }
+
   return (
     <Routes>
       {/* {routes.map((route, i) => <SubRoutes key={i} {...route} />)} */}
       {/* <Route path="/login" element={<Login />} exact={false} /> */}
-      <Route path="*" element={<Test />} />
+      {/* <Route path="*" element={<Test />} /> */}
       {routerBody}
       {/* {element} */}
     </Routes>
@@ -180,7 +196,7 @@ function deepMenu(list) {
   })
 }
 
-// 递归菜单
+// 递归铺平菜单
 function deepMenu2(list, rlist) {
   list.forEach(item => {
     const Comp = loadable(item.component, { fallback: <Spin tip="页面加载中...." /> })
@@ -190,6 +206,37 @@ function deepMenu2(list, rlist) {
     }
   })
   return rlist
+}
+
+// 铺平菜单
+function pavingMenu(menus, arr = []) {
+  menus.forEach(item => {
+    let obj = {
+      path: item.path,
+      name: item.name,
+      code: item.code,
+    }
+    arr.push(obj)
+    if (item.children && item.children.length) arr.push(...pavingMenu(item.children))
+  })
+  return arr
+}
+
+function filterMenu(menus1, menus2) {
+  let arr = []
+  menus1.forEach(item => {
+    menus2.forEach(item2 => {
+      if (item.code === item2.code) {
+        let { children, ...obj } = item
+        if (children && children.length) {
+          let arr2 = filterMenu(children, menus2)
+          if (arr2 && arr2.length) obj.children = arr2
+        }
+        arr.push(obj)
+      }
+    })
+  })
+  return arr
 }
 
 // mock

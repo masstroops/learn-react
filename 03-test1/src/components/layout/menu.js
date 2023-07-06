@@ -1,7 +1,8 @@
 import { Component } from "react";
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
-import { menus as menuList } from '../../router/router'
+// import { menus as menuList } from '../../router/router'
+import { connect } from "react-redux"
 
 const { SubMenu } = Menu
 
@@ -11,7 +12,7 @@ class menu extends Component {
     this.state = {  };
   }
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const renderMenu = (item, path) => {
       if (item.hidden === false) {
         return null;
@@ -32,6 +33,7 @@ class menu extends Component {
       );
     };
 
+    const { menuList } = this.props
     const menuComponent = () => menuList.map(m => renderMenu(m, ''))
 
     return (
@@ -53,4 +55,10 @@ class menu extends Component {
   }
 }
 
-export default menu;
+const mapStateToProps = (state) => {
+  return {
+    menuList: state.menu.menu,
+  }
+}
+
+export default connect(mapStateToProps)(menu);
